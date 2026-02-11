@@ -20,7 +20,7 @@ EOT
     name                    = string
     resource_group_name     = string
     description             = optional(string)
-    log_verbose             = optional(bool, false)
+    log_verbose             = optional(bool) # Default: false
     tags                    = optional(map(string))
   }))
 }
