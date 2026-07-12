@@ -1,3 +1,7 @@
+output "automation_dsc_configurations_id" {
+  description = "Map of id values across all automation_dsc_configurations, keyed the same as var.automation_dsc_configurations"
+  value       = { for k, v in azurerm_automation_dsc_configuration.automation_dsc_configurations : k => v.id }
+}
 output "automation_dsc_configurations_automation_account_name" {
   description = "Map of automation_account_name values across all automation_dsc_configurations, keyed the same as var.automation_dsc_configurations"
   value       = { for k, v in azurerm_automation_dsc_configuration.automation_dsc_configurations : k => v.automation_account_name }
