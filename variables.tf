@@ -20,31 +20,21 @@ EOT
     name                    = string
     resource_group_name     = string
     description             = optional(string)
-    log_verbose             = optional(bool) # Default: false
+    log_verbose             = optional(bool)
     tags                    = optional(map(string))
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.automation_dsc_configurations : (
-        can(regex("^[a-zA-Z0-9_]{1,64}$", v.name))
-      )
-    ])
-    error_message = "The name length must be from 1 to 64 characters. The name can only contain letters, numbers and underscores."
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.automation_dsc_configurations : (
-        length(v.content_embedded) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_automation_dsc_configuration's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
   # Review, translate into a real validation{} block above, and delete once confirmed.
+  # path: name
+  #   condition: can(regex("^[a-zA-Z0-9_]{1,64}$", value))
+  #   message:   The name length must be from 1 to 64 characters. The name can only contain letters, numbers and underscores.
   # path: automation_account_name
   #   source:    validate.AutomationAccount: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
+  # path: content_embedded
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: resource_group_name
   #   condition: length(value) <= 90
   #   message:   [from resourcegroups.ValidateName: invalid when len(value) > 90]
